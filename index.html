@@ -1,44 +1,110 @@
-<!-- Basic structure of the name and age prediction website -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Name and Age Prediction</title>
-    <!-- Link to external CSS for styling -->
-    <link rel="stylesheet" href="styles.css">
+    <title>Predict Name & Age</title>
+    <!-- Embedded CSS for styling -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #007BFF;
+            font-size: 2rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
 </head>
 <body>
-    <!-- Main Container -->
     <div class="container">
-        <h1>Predict Name and Age</h1>
-        <p>Enter your details and get a prediction!</p>
-        <form id="predictionForm">
-            <label for="name">Enter Your Name:</label>
-            <input type="text" id="name" name="name" placeholder="e.g., John Doe" required>
-
-            <label for="country">Select Your Country:</label>
-            <select id="country" name="country" required>
-                <option value="">Select Country</option>
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="IN">India</option>
-                <!-- Add more countries as needed -->
-            </select>
-
-            <button type="submit">Predict Now</button>
-        </form>
-
-        <!-- Area to display prediction result -->
-        <div id="result" class="hidden">
-            <h2>Prediction Result</h2>
+        <h1>Predict Name & Age</h1>
+        <p>Enter your name to get a prediction!</p>
+        <input type="text" id="name" placeholder="Enter your name" required>
+        <button id="predictBtn">Predict Age</button>
+        <div id="result" class="result hidden">
             <p id="predictedName">Name: </p>
             <p id="predictedAge">Predicted Age: </p>
         </div>
     </div>
 
-    <!-- Link to external JS for interactivity -->
-    <script src="script.js"></script>
+    <!-- Embedded JavaScript for prediction logic -->
+    <script>
+        document.getElementById('predictBtn').addEventListener('click', function () {
+            const name = document.getElementById('name').value;
+
+            if (!name) {
+                alert("Please enter a name.");
+                return;
+            }
+
+            // Fetch predicted age from agify.io API
+            fetch(`https://api.agify.io/?name=${name}`)
+                .then(response => response.json())
+                .then(data => {
+                    const predictedAge = data.age || 'Not available';
+
+                    // Display the prediction result
+                    document.getElementById('predictedName').textContent = `Name: ${name}`;
+                    document.getElementById('predictedAge').textContent = `Predicted Age: ${predictedAge}`;
+                    document.getElementById('result').classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
 </body>
 </html>
