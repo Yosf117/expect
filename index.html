@@ -1,109 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predict Name & Age</title>
+    <title>توقع الاسم والعمر</title>
     <!-- Embedded CSS for styling -->
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f5;
-            color: #333;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(to right, #141E30, #243B55);
+            color: #fff;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            direction: rtl;
         }
 
         .container {
             background-color: #fff;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
             max-width: 400px;
             width: 100%;
+            background: #1e3c72;
+            color: #fff;
         }
 
         h1 {
-            color: #007BFF;
-            font-size: 2rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            color: #FFD700;
+            font-size: 2.5rem;
         }
 
         button {
             width: 100%;
             padding: 15px;
-            background-color: #007BFF;
-            color: white;
+            background-color: #FFD700;
+            color: #000;
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
             border-radius: 8px;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #ffcc00;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
         }
 
         .hidden {
             display: none;
         }
-
-        .result {
-            margin-top: 20px;
-            font-size: 1.2rem;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Predict Name & Age</h1>
-        <p>Enter your name to get a prediction!</p>
-        <input type="text" id="name" placeholder="Enter your name" required>
-        <button id="predictBtn">Predict Age</button>
+        <h1>توقع الاسم والعمر</h1>
+        <p>اضغط على الزر للتنبؤ باسمك وعمرك</p>
+        <button id="predictBtn">توقع الآن</button>
         <div id="result" class="result hidden">
-            <p id="predictedName">Name: </p>
-            <p id="predictedAge">Predicted Age: </p>
+            <p id="predictedName">الاسم: </p>
+            <p id="predictedAge">العمر المتوقع: </p>
         </div>
     </div>
 
     <!-- Embedded JavaScript for prediction logic -->
     <script>
         document.getElementById('predictBtn').addEventListener('click', function () {
-            const name = document.getElementById('name').value;
+            // هنا يمكنك إضافة منطق معقد للتنبؤ بناءً على بيانات، لكن سنقوم بعمل توقع بسيط الآن.
+            const randomNames = ["فارس", "محمد", "عبدالله", "نايف", "يوسف"];
+            const randomAges = [25, 30, 35, 40, 45, 50];
 
-            if (!name) {
-                alert("Please enter a name.");
-                return;
-            }
+            // اختيار اسم عشوائي من القائمة
+            const predictedName = randomNames[Math.floor(Math.random() * randomNames.length)];
+            // اختيار عمر عشوائي من القائمة
+            const predictedAge = randomAges[Math.floor(Math.random() * randomAges.length)];
 
-            // Fetch predicted age from agify.io API
-            fetch(`https://api.agify.io/?name=${name}`)
-                .then(response => response.json())
-                .then(data => {
-                    const predictedAge = data.age || 'Not available';
-
-                    // Display the prediction result
-                    document.getElementById('predictedName').textContent = `Name: ${name}`;
-                    document.getElementById('predictedAge').textContent = `Predicted Age: ${predictedAge}`;
-                    document.getElementById('result').classList.remove('hidden');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            // عرض النتيجة
+            document.getElementById('predictedName').textContent = `الاسم: ${predictedName}`;
+            document.getElementById('predictedAge').textContent = `العمر المتوقع: ${predictedAge}`;
+            document.getElementById('result').classList.remove('hidden');
         });
     </script>
 </body>
