@@ -249,28 +249,6 @@
             cursor: pointer;
         }
 
-        /* التنسيق الجديد للتفاعلات */
-        .like-icon, .copy-icon, .share-icon {
-            display: none;
-            color: green;
-            font-size: 1.5rem;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .tip.liked .like-icon {
-            display: block;
-        }
-
-        .tip.copied .copy-icon {
-            display: block;
-        }
-
-        .tip.shared .share-icon {
-            display: block;
-        }
-
     </style>
 </head>
 <body>
@@ -359,11 +337,11 @@
         let likedWisdoms = []; // حفظ الحكم التي نالت إعجاب المستخدم
         let mostLikedTip = tips[0]; // النصيحة الأكثر تفضيلاً حالياً
 
-        function displayNotification(message) {
+        function displayNotification() {
             const notification = document.createElement("div");
             notification.className = "notification";
             notification.innerHTML = `
-                <p>${message}</p>
+                <p>${tips[Math.floor(Math.random() * tips.length)]}</p>
                 <button onclick="this.parentElement.style.display='none'">&times;</button>
                 <div class="timer-bar"></div>
             `;
@@ -383,50 +361,84 @@
                     <p>${tip}</p>
                     <button onclick="likeTip('${tip}')">👍 أعجبني</button>
                     <button class="copy-btn" onclick="copyText('${tip}')">📋 نسخ</button>
-                    <button class="share-btn" onclick="shareTip('${tip}')">🔗 مشاركة</button>
-                    <span class="like-icon">👍</span>
-                    <span class="copy-icon">📋 تم النسخ!</span>
-                    <span class="share-icon">🔗 تم المشاركة!</span>
+                    <button class="share-btn" onclick="shareText('${tip}')">🔗 مشاركة</button>
                 `;
                 tipsContainer.appendChild(tipElement);
             });
         }
 
         function likeTip(tip) {
-            if (!likedTips.includes(tip)) {
-                likedTips.push(tip);
-                document.querySelectorAll('.tip').forEach(element => {
-                    if (element.innerText.includes(tip)) {
-                        element.classList.add("liked");
-                    }
+            likedTips.push(tip);
+            alert("تم إضافة النصيحة إلى المفضلة!");
+            updateLikedTips();
+            updateMostLikedTip(tip);
+        }
+
+        function updateMostLikedTip(tip) {
+            if (!mostLikedTip) {
+                mostLikedTip = tip;
+            } else {
+                const tipCount = likedTips.filter(t => t === tip).length;
+                if (tipCount > likedTips.filter(t => t === mostLikedTip).length) {
+                    mostLikedTip = tip;
+                }
+            }
+            document.getElementById("most-liked-text").textContent = mostLikedTip;
+        }
+
+        function updateLikedTips() {
+            const likedContainer = document.getElementById("liked-tips-container");
+            likedContainer.innerHTML = "";
+            likedTips.forEach(tip => {
+                const likedElement = document.createElement("div");
+                likedElement.className = "tip";
+                likedElement.innerHTML = `
+                    <p>${tip}</p>
+                `;
+                likedContainer.appendChild(likedElement);
+            });
+        }
+
+        function searchTips() {
+            const query = document.getElementById("search-input").value;
+            if (query) {
+                const filteredTips = tips.filter(tip => tip.includes(query));
+                const tipsContainer = document.getElementById("tips-container");
+                tipsContainer.innerHTML = "";
+                filteredTips.forEach(tip => {
+                    const tipElement = document.createElement("div");
+                    tipElement.className = "tip";
+                    tipElement.innerHTML = `
+                        <p>${tip}</p>
+                        <button onclick="likeTip('${tip}')">👍 أعجبني</button>
+                        <button class="copy-btn" onclick="copyText('${tip}')">📋 نسخ</button>
+                        <button class="share-btn" onclick="shareText('${tip}')">🔗 مشاركة</button>
+                    `;
+                    tipsContainer.appendChild(tipElement);
                 });
-                displayNotification("تم إضافة النصيحة إلى المفضلة!");
             }
         }
 
-        function copyText(tip) {
-            navigator.clipboard.writeText(tip);
-            document.querySelectorAll('.tip').forEach(element => {
-                if (element.innerText.includes(tip)) {
-                    element.classList.add("copied");
-                }
-            });
-            displayNotification("تم نسخ النصيحة!");
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert("تم نسخ النص!");
         }
 
-        function shareTip(tip) {
-            const url = `https://www.example.com/share?text=${encodeURIComponent(tip)}`;
-            document.querySelectorAll('.tip').forEach(element => {
-                if (element.innerText.includes(tip)) {
-                    element.classList.add("shared");
-                }
-            });
-            window.open(url, "_blank");
+        function shareText(text) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'نصيحة تطوير الذات',
+                    text: text,
+                    url: window.location.href
+                }).then(() => alert('تم المشاركة!')).catch(console.error);
+            } else {
+                alert("مشاركة غير مدعومة في هذا المتصفح.");
+            }
         }
 
-        // عرض النصائح عند تحميل الصفحة
         window.onload = function() {
             loadMoreTips();
+            setInterval(displayNotification, 10000);
         };
     </script>
 </body>
