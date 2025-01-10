@@ -32,16 +32,6 @@
             align-items: center;
         }
 
-        header::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: url('https://www.transparenttextures.com/patterns/arches.png');
-        }
-
         nav ul {
             list-style: none;
             padding: 0;
@@ -158,7 +148,6 @@
             color: white;
         }
 
-        /* تصميم زر النسخ */
         .copy-btn {
             background-color: #00e676;
             color: white;
@@ -168,7 +157,6 @@
             cursor: pointer;
         }
 
-        /* تصميم زر المشاركة */
         .share-btn {
             background-color: #2196f3;
             color: white;
@@ -189,7 +177,6 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* صفحة النصائح المفضلة */
         #liked-tips-section {
             background-color: #fff4e6;
             margin: 20px;
@@ -209,7 +196,6 @@
             margin-right: 10px;
         }
 
-        /* تصميم الإشعار */
         .notification {
             position: fixed;
             top: 10px;
@@ -276,7 +262,6 @@
             margin: 0;
             font-size: 1.1rem;
         }
-
     </style>
 </head>
 <body>
@@ -287,39 +272,29 @@
                 <li><a href="#">🏠 الرئيسية</a></li>
                 <li><a href="#today-tips">📅 نصائح اليوم</a></li>
                 <li><a href="#liked-tips-section">💖 نصائحي المفضلة</a></li>
-                <li><a href="wisdom.html">💡 الحكم</a></li> <!-- رابط صفحة الحكم الجديدة -->
+                <li><a href="wisdom.html">💡 الحكم</a></li>
                 <li><a href="#contact">📞 تواصل معنا</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- النصيحة الأكثر تفضيلاً -->
-    <section id="most-liked-tip">
-        <h2>أكثر النصائح تفضيلاً من الزوار:</h2>
-        <p id="most-liked-text">هذه النصيحة الأكثر تفضيلاً حالياً...</p>
-    </section>
-
     <!-- شريط البحث -->
     <section id="search-bar">
-        <input type="text" placeholder="ابحث عن نصيحة..." id="search-input">
+        <input type="text" placeholder="ابحث عن نصيحة..." id="search-input" oninput="showSuggestions()">
         <button onclick="searchTips()">🔍 بحث</button>
+        <div id="suggestions-list" style="display:none;"></div>
     </section>
 
     <!-- نصيحة اليوم -->
     <section id="today-tips">
         <h2>نصائح اليوم</h2>
-        <div id="tips-container">
-            <!-- سيتم إضافة النصائح هنا بواسطة JavaScript -->
-        </div>
-        <button id="load-more" onclick="loadMoreTips()">عرض المزيد</button>
+        <div id="tips-container"></div>
     </section>
 
     <!-- قائمة النصائح التي نالت إعجاب المستخدم -->
     <section id="liked-tips-section">
         <h2>نصائحي المفضلة</h2>
-        <div id="liked-tips-container">
-            <!-- سيتم إضافة النصائح التي نالت إعجاب المستخدم هنا -->
-        </div>
+        <div id="liked-tips-container"></div>
     </section>
 
     <footer>
@@ -391,9 +366,41 @@
             }
         }
 
+        function showSuggestions() {
+            const query = document.getElementById("search-input").value;
+            const suggestionsList = document.getElementById("suggestions-list");
+            if (query) {
+                const filteredTips = tips.filter(tip => tip.includes(query));
+                suggestionsList.innerHTML = "";
+                filteredTips.forEach(tip => {
+                    const suggestionItem = document.createElement("div");
+                    suggestionItem.textContent = tip;
+                    suggestionItem.onclick = () => {
+                        document.getElementById("search-input").value = tip;
+                        suggestionsList.style.display = "none";
+                        searchTips();
+                    };
+                    suggestionsList.appendChild(suggestionItem);
+                });
+                suggestionsList.style.display = "block";
+            } else {
+                suggestionsList.style.display = "none";
+            }
+        }
+
+        function likeTip(tip) {
+            const likedTipsContainer = document.getElementById("liked-tips-container");
+            const likedTipElement = document.createElement("div");
+            likedTipElement.textContent = tip;
+            likedTipsContainer.appendChild(likedTipElement);
+            
+            // Show notification for like
+            showNotification("تم إضافة النصيحة إلى المفضلة!");
+        }
+
         function copyText(text) {
             navigator.clipboard.writeText(text);
-            alert("تم نسخ النص!");
+            showNotification("تم نسخ النص!");
         }
 
         function shareText(text) {
@@ -408,10 +415,26 @@
             }
         }
 
+        function showNotification(message) {
+            const notification = document.createElement("div");
+            notification.classList.add("notification");
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="closeNotification(this)">×</button>
+                <div class="timer-bar"></div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => closeNotification(notification), 3000);
+        }
+
+        function closeNotification(notification) {
+            notification.style.opacity = "0";
+            setTimeout(() => notification.remove(), 300);
+        }
+
         window.onload = function() {
             loadMoreTips();
         };
     </script>
 </body>
 </html>
-
