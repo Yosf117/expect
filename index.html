@@ -169,12 +169,6 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* تأثيرات التفاعل */
-        .button-pressed {
-            transform: scale(0.95);
-            background-color: #ff5722;
-        }
-
         /* تصميم متجاوب */
         @media (max-width: 768px) {
             #search-bar input {
@@ -189,17 +183,36 @@
                 font-size: 1rem;
             }
         }
+
+        /* صفحة النصائح المفضلة */
+        #liked-tips-section {
+            background-color: #fff4e6;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #liked-tips-section h2 {
+            color: #ff5722;
+            display: flex;
+            align-items: center;
+        }
+
+        #liked-tips-section h2::before {
+            content: "⭐";
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
-    <!-- العنوان الرئيسي -->
     <header>
         <h1>نصائح يومية لتحسين حياتك</h1>
         <nav>
             <ul>
                 <li><a href="#">🏠 الرئيسية</a></li>
                 <li><a href="#today-tips">📅 نصائح اليوم</a></li>
-                <li><a href="#archive">📚 أرشيف النصائح</a></li>
+                <li><a href="#liked-tips-section">💖 نصائحي المفضلة</a></li>
                 <li><a href="#contact">📞 تواصل معنا</a></li>
             </ul>
         </nav>
@@ -226,7 +239,14 @@
         <button id="load-more" onclick="loadMoreTips()">عرض المزيد</button>
     </section>
 
-    <!-- Footer -->
+    <!-- قائمة النصائح التي نالت إعجاب المستخدم -->
+    <section id="liked-tips-section">
+        <h2>نصائحي المفضلة</h2>
+        <div id="liked-tips-container">
+            <!-- سيتم إضافة النصائح التي نالت إعجاب المستخدم هنا -->
+        </div>
+    </section>
+
     <footer>
         <p>جميع الحقوق محفوظة © 2025 نصائح يومية لتحسين حياتك</p>
     </footer>
@@ -247,6 +267,7 @@
 
         let currentPage = 1;
         const tipsPerPage = 5;
+        let likedTips = [];
 
         // دالة لعرض النصائح
         function displayTips() {
@@ -276,7 +297,9 @@
 
         // دالة لإعجاب النصيحة
         function likeTip(index) {
-            alert(`أعجبتك النصيحة: "${tips[index]}"`);
+            likedTips.push(tips[index]);
+            updateLikedTips();
+            alert(`تم إضافة النصيحة إلى المفضلة: "${tips[index]}"`);
         }
 
         // دالة لمشاركة النصيحة
@@ -291,12 +314,30 @@
                 .catch(() => alert("فشل في نسخ النصيحة."));
         }
 
+        // دالة لعرض النصائح المفضلة
+        function updateLikedTips() {
+            const likedTipsContainer = document.getElementById('liked-tips-container');
+            likedTipsContainer.innerHTML = '';
+            likedTips.forEach((tip, index) => {
+                const tipDiv = document.createElement('div');
+                tipDiv.classList.add('tip');
+                tipDiv.innerHTML = `<p>${tip}</p>`;
+                likedTipsContainer.appendChild(tipDiv);
+            });
+        }
+
         // دالة للبحث عن النصيحة
         function searchTips() {
             const searchInput = document.getElementById('search-input').value.toLowerCase();
             const results = tips.filter(tip => tip.toLowerCase().includes(searchInput));
             alert(`نتائج البحث: ${results.join(', ')}`);
         }
+
+        // إشعارات كل 10 ثواني
+        setInterval(() => {
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            alert(`نصيحة تطوير الذات: ${randomTip}`);
+        }, 10000);
 
         // عرض النصائح عند تحميل الصفحة
         window.onload = displayTips;
