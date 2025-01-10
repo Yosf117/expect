@@ -5,211 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نصائح يومية لتحسين حياتك</title>
     <style>
-        /* تحسين التصميم */
+        /* تعديل عنوان الموقع */
+        h1 {
+            font-family: 'Helvetica Neue', sans-serif;
+            color: #ff6f61; /* اللون المميز */
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* تصميم النصائح */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #fff9f0;
+            background-color: #f7f7f7;
             color: #333;
             margin: 0;
             padding: 0;
-            transition: all 0.3s ease;
         }
 
-        header {
-            background-color: #ffcc80;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 10px;
-        }
-
-        nav ul li {
-            display: inline-block;
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #ff9800;
-        }
-
-        #search-bar {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        #search-bar input {
-            width: 60%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        #search-bar input:focus {
-            border-color: #ff9800;
-            outline: none;
-        }
-
-        #search-bar button {
-            padding: 10px 20px;
-            background-color: #ffb74d;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 10px;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        #search-bar button:hover {
-            background-color: #ffa726;
-            transform: scale(1.1);
-        }
-
-        #featured-tip, #today-tips, #archive, #contact {
-            background-color: white;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .tip {
-            background-color: #fff7e0;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
-            transition: background-color 0.3s ease;
-        }
-
-        .tip:hover {
-            background-color: #fff3cd;
-        }
-
-        .tip p {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .tip button {
-            padding: 5px 10px;
-            margin-right: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-
-        .tip button:hover {
-            transform: scale(1.1);
-        }
-
-        .tip button:nth-child(1) {
-            background-color: #ffeb3b;
-            color: #333;
-        }
-
-        .tip button:nth-child(2) {
-            background-color: #4a90e2;
-            color: white;
-        }
-
-        .tip button:nth-child(3) {
-            background-color: #ff9800;
-            color: white;
-        }
-
-        .copy-btn {
-            background-color: #00e676;
-            color: white;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-
-        .share-btn {
-            background-color: #2196f3;
-            color: white;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #ffcc80;
-            color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        #liked-tips-section {
-            background-color: #fff4e6;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        #liked-tips-section h2 {
-            color: #ff5722;
-            display: flex;
-            align-items: center;
-        }
-
-        #liked-tips-section h2::before {
-            content: "⭐";
-            margin-right: 10px;
-        }
-
+        /* تحسين البار الذي يعرض النصائح */
         .notification {
             position: fixed;
             top: 10px;
-            right: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #ff9800;
             color: white;
-            padding: 15px;
+            padding: 10px 20px;
             border-radius: 5px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.3s ease;
+            opacity: 1;
+            animation: showNotification 3s ease-out;
+        }
+
+        @keyframes showNotification {
+            0% { opacity: 0; top: 0; }
+            100% { opacity: 1; top: 10px; }
         }
 
         .notification .timer-bar {
@@ -235,33 +68,100 @@
             cursor: pointer;
         }
 
-        /* تصميم صفحة الحكم */
-        #wisdom-container {
-            background-color: #fff8e1;
-            padding: 20px;
-            margin-top: 20px;
+        /* تحسين النصوص والتنسيقات */
+        .tip {
+            background-color: #fff7e0;
+            padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .wisdom {
-            background-color: #fff3cd;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 8px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
-        .wisdom:hover {
-            background-color: #fff9e0;
+        .tip:hover {
+            background-color: #fff3cd;
+            transform: scale(1.05);
         }
 
-        .wisdom p {
-            margin: 0;
+        /* تحسين شريط البحث */
+        #search-bar input {
+            width: 60%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all 0.3s ease;
             font-size: 1.1rem;
         }
+
+        #search-bar input:focus {
+            border-color: #ff9800;
+            outline: none;
+        }
+
+        #search-bar button {
+            padding: 12px 20px;
+            background-color: #ffb74d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        #search-bar button:hover {
+            background-color: #ffa726;
+        }
+
+        /* تحسين الأزرار */
+        .copy-btn, .share-btn, .like-btn {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn {
+            background-color: #00e676;
+        }
+
+        .share-btn {
+            background-color: #2196f3;
+        }
+
+        .like-btn {
+            background-color: #ffeb3b;
+        }
+
+        .copy-btn:hover, .share-btn:hover, .like-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* تصميم القدم (Footer) */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ff6f61;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* تحكم في التنسيق العام */
+        .tip, .notification, #search-bar input, footer {
+            box-sizing: border-box;
+        }
+
+        /* تغيير شكل أيقونة الإعجاب أو النسخ */
+        .liked, .copied {
+            color: #00e676;
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -272,29 +172,41 @@
                 <li><a href="#">🏠 الرئيسية</a></li>
                 <li><a href="#today-tips">📅 نصائح اليوم</a></li>
                 <li><a href="#liked-tips-section">💖 نصائحي المفضلة</a></li>
-                <li><a href="wisdom.html">💡 الحكم</a></li>
                 <li><a href="#contact">📞 تواصل معنا</a></li>
+                <li><a href="#wisdom">💡 الحكم</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- شريط البحث -->
     <section id="search-bar">
-        <input type="text" placeholder="ابحث عن نصيحة..." id="search-input" oninput="showSuggestions()">
+        <input type="text" placeholder="ابحث عن نصيحة..." id="search-input">
         <button onclick="searchTips()">🔍 بحث</button>
-        <div id="suggestions-list" style="display:none;"></div>
     </section>
 
-    <!-- نصيحة اليوم -->
+    <!-- النصيحة الأكثر تفضيلاً -->
+    <section id="most-liked-tip">
+        <h2>أكثر النصائح تفضيلاً من الزوار:</h2>
+        <p id="most-liked-text">هذه النصيحة الأكثر تفضيلاً حالياً...</p>
+    </section>
+
     <section id="today-tips">
         <h2>نصائح اليوم</h2>
         <div id="tips-container"></div>
+        <button id="load-more" onclick="loadMoreTips()">عرض المزيد</button>
     </section>
 
-    <!-- قائمة النصائح التي نالت إعجاب المستخدم -->
+    <!-- قائمة النصائح المفضلة -->
     <section id="liked-tips-section">
         <h2>نصائحي المفضلة</h2>
         <div id="liked-tips-container"></div>
+    </section>
+
+    <!-- صفحة الحكم -->
+    <section id="wisdom">
+        <h2>أقوال وحكم</h2>
+        <div id="wisdom-container">
+            <!-- سيتم إضافة الحكم هنا بواسطة JavaScript -->
+        </div>
     </section>
 
     <footer>
@@ -312,129 +224,55 @@
             "ابتعد عن الأشخاص السامين.",
             "تحكم في أفكارك لتتحكم في حياتك.",
             "الأمل هو سر النجاح.",
-            "كل يوم هو فرصة جديدة للتعلم والنمو.",
-            "اعمل بحب، فالحب هو الوقود الحقيقي للنجاح.",
-            "ثق بقدراتك، فالتحديات يمكن تجاوزها.",
-            "التعاون هو الطريق الأمثل لتحقيق الأهداف."
+            "كل يوم هو فرصة جديدة للتعلم والنمو."
         ];
 
-        const wisdoms = [
-            "الحكمة هي الجسر بين المعرفة والعمل.",
-            "الشجاعة ليست غياب الخوف، بل القدرة على مواجهته.",
-            "السعادة لا تأتي من المال، بل من العطاء.",
-            "من لا يتعلم من أخطائه لن ينجح.",
-            "الحكمة تبدأ بتوجيه أسئلة صحيحة.",
-            "التفكير هو أساس الإبداع.",
-            "الوقت هو أكثر ما نهدره دون أن نشعر.",
-            "العقل مثل العضلة، كلما تمرن، أصبح أقوى.",
-            "النجاح ليس مصادفة، بل نتيجة للاستمرار.",
-            "من يريد النجاح يجب أن يتعلم الصبر."
-        ];
+        let mostLikedTip = tips[0]; // النصيحة الأكثر تفضيلاً حالياً
 
-        function loadMoreTips() {
-            const tipsContainer = document.getElementById("tips-container");
-            tips.forEach(tip => {
-                const tipElement = document.createElement("div");
-                tipElement.className = "tip";
-                tipElement.innerHTML = `
-                    <p>${tip}</p>
-                    <button onclick="likeTip('${tip}')">👍 أعجبني</button>
-                    <button class="copy-btn" onclick="copyText('${tip}')">📋 نسخ</button>
-                    <button class="share-btn" onclick="shareText('${tip}')">🔗 مشاركة</button>
-                `;
-                tipsContainer.appendChild(tipElement);
-            });
-        }
+        // عرض إشعار جديد كل 10 ثواني
+        setInterval(displayNotification, 10000);
 
-        function searchTips() {
-            const query = document.getElementById("search-input").value;
-            if (query) {
-                const filteredTips = tips.filter(tip => tip.includes(query));
-                const tipsContainer = document.getElementById("tips-container");
-                tipsContainer.innerHTML = "";
-                filteredTips.forEach(tip => {
-                    const tipElement = document.createElement("div");
-                    tipElement.className = "tip";
-                    tipElement.innerHTML = `
-                        <p>${tip}</p>
-                        <button onclick="likeTip('${tip}')">👍 أعجبني</button>
-                        <button class="copy-btn" onclick="copyText('${tip}')">📋 نسخ</button>
-                        <button class="share-btn" onclick="shareText('${tip}')">🔗 مشاركة</button>
-                    `;
-                    tipsContainer.appendChild(tipElement);
-                });
-            }
-        }
-
-        function showSuggestions() {
-            const query = document.getElementById("search-input").value;
-            const suggestionsList = document.getElementById("suggestions-list");
-            if (query) {
-                const filteredTips = tips.filter(tip => tip.includes(query));
-                suggestionsList.innerHTML = "";
-                filteredTips.forEach(tip => {
-                    const suggestionItem = document.createElement("div");
-                    suggestionItem.textContent = tip;
-                    suggestionItem.onclick = () => {
-                        document.getElementById("search-input").value = tip;
-                        suggestionsList.style.display = "none";
-                        searchTips();
-                    };
-                    suggestionsList.appendChild(suggestionItem);
-                });
-                suggestionsList.style.display = "block";
-            } else {
-                suggestionsList.style.display = "none";
-            }
-        }
-
-        function likeTip(tip) {
-            const likedTipsContainer = document.getElementById("liked-tips-container");
-            const likedTipElement = document.createElement("div");
-            likedTipElement.textContent = tip;
-            likedTipsContainer.appendChild(likedTipElement);
-            
-            // Show notification for like
-            showNotification("تم إضافة النصيحة إلى المفضلة!");
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text);
-            showNotification("تم نسخ النص!");
-        }
-
-        function shareText(text) {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'نصيحة تطوير الذات',
-                    text: text,
-                    url: window.location.href
-                }).then(() => alert('تم المشاركة!')).catch(console.error);
-            } else {
-                alert("مشاركة غير مدعومة في هذا المتصفح.");
-            }
-        }
-
-        function showNotification(message) {
+        // وظيفة لإظهار إشعار
+        function displayNotification() {
             const notification = document.createElement("div");
-            notification.classList.add("notification");
+            notification.className = "notification";
             notification.innerHTML = `
-                <span>${message}</span>
-                <button onclick="closeNotification(this)">×</button>
+                <p>${tips[Math.floor(Math.random() * tips.length)]}</p>
+                <button onclick="this.parentElement.style.display='none'">&times;</button>
                 <div class="timer-bar"></div>
             `;
             document.body.appendChild(notification);
-            setTimeout(() => closeNotification(notification), 3000);
+            setTimeout(() => {
+                notification.style.opacity = "0";
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
-        function closeNotification(notification) {
-            notification.style.opacity = "0";
-            setTimeout(() => notification.remove(), 300);
+        // إضافة وظيفة بحث النصائح
+        function searchTips() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const filteredTips = tips.filter(tip => tip.toLowerCase().includes(query));
+            document.getElementById("tips-container").innerHTML = filteredTips.map(tip => `<div class="tip">${tip} <button class="like-btn" onclick="likeTip('${tip}')">👍</button> <button class="copy-btn" onclick="copyTip('${tip}')">📋</button></div>`).join('');
         }
 
-        window.onload = function() {
-            loadMoreTips();
-        };
+        // إضافة إعجاب على النصائح
+        function likeTip(tip) {
+            alert(`تم إضافة ${tip} إلى النصائح المفضلة!`);
+            document.getElementById("liked-tips-container").innerHTML += `<div class="tip">${tip}</div>`;
+        }
+
+        // إضافة نسخ للنصائح
+        function copyTip(tip) {
+            navigator.clipboard.writeText(tip).then(() => {
+                alert("تم نسخ النصيحة!");
+            });
+        }
+
+        // تحميل المزيد من النصائح
+        function loadMoreTips() {
+            const newTips = ["نصيحة جديدة هنا...", "نصيحة أخرى هنا..."];
+            document.getElementById("tips-container").innerHTML += newTips.map(tip => `<div class="tip">${tip} <button class="like-btn" onclick="likeTip('${tip}')">👍</button> <button class="copy-btn" onclick="copyTip('${tip}')">📋</button></div>`).join('');
+        }
     </script>
 </body>
 </html>
