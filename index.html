@@ -1,56 +1,80 @@
-<!-- HTML (Frontend) -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد الصور</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        input, button { margin: 10px; padding: 10px; font-size: 16px; }
-    </style>
+    <title>نصائح يومية لتحسين حياتك</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>مولد الصور بالوصف</h1>
-    <input type="text" id="description" placeholder="أدخل وصف الصورة" />
-    <button onclick="generateImage()">توليد الصورة</button>
-    <div id="result"></div>
+    <!-- العنوان الرئيسي -->
+    <header>
+        <h1>نصائح يومية لتحسين حياتك</h1>
+        <nav>
+            <ul>
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#today-tips">نصائح اليوم</a></li>
+                <li><a href="#archive">أرشيف النصائح</a></li>
+                <li><a href="#contact">تواصل معنا</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <script>
-        function generateImage() {
-            const description = document.getElementById('description').value;
-            fetch('/generate-image', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ description: description })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerHTML = '<img src="' + data.image_url + '" alt="Generated Image" />';
-            });
-        }
-    </script>
+    <!-- شريط البحث -->
+    <section id="search-bar">
+        <input type="text" placeholder="ابحث عن نصيحة...">
+        <button>بحث</button>
+    </section>
+
+    <!-- نصيحة اليوم المميزة -->
+    <section id="featured-tip">
+        <h2>نصيحة اليوم المميزة</h2>
+        <p>هذه نصيحة عشوائية مميزة لليوم...</p>
+    </section>
+
+    <!-- نصائح اليوم -->
+    <section id="today-tips">
+        <h2>نصائح اليوم</h2>
+        <div class="tips">
+            <!-- مثال لنصيحة -->
+            <div class="tip">
+                <p>هذه نصيحة 1.</p>
+                <button>أعجبني</button>
+                <button>شارك</button>
+                <button>إضافة إلى المفضلة</button>
+            </div>
+            <div class="tip">
+                <p>هذه نصيحة 2.</p>
+                <button>أعجبني</button>
+                <button>شارك</button>
+                <button>إضافة إلى المفضلة</button>
+            </div>
+            <!-- كرر النصائح حتى تصل إلى 150 نصيحة -->
+        </div>
+        <button>عرض المزيد</button>
+    </section>
+
+    <!-- أرشيف النصائح -->
+    <section id="archive">
+        <h2>أرشيف النصائح</h2>
+        <p>تصفح نصائح الأيام السابقة حسب الفئات.</p>
+    </section>
+
+    <!-- تواصل معنا -->
+    <section id="contact">
+        <h2>تواصل معنا</h2>
+        <form>
+            <label for="name">الاسم:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="message">الرسالة:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">إرسال</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>جميع الحقوق محفوظة © 2025 نصائح يومية لتحسين حياتك</p>
+    </footer>
 </body>
 </html>
-
-<!-- Python (Backend using Flask) -->
-from flask import Flask, request, jsonify
-import requests
-
-app = Flask(__name__)
-
-# مثال على واجهة توليد الصور باستخدام API مثل DALL·E
-@app.route('/generate-image', methods=['POST'])
-def generate_image():
-    data = request.get_json()
-    description = data['description']
-    
-    # إرسال الطلب إلى خدمة توليد الصور (استبدال هذا الجزء بال API الخاصة بك)
-    image_url = "https://api.openai.com/v1/dalle"  # رابط API لتوليد الصور
-    # هنا تقوم بطلب الصورة باستخدام API وتعيد الرابط أو الصورة.
-
-    # مثال لإرجاع الصورة (الربط بالمثال الوهمي)
-    return jsonify({'image_url': 'https://example.com/generated-image.jpg'})
-
-if __name__ == '__main__':
-    app.run(debug=True)
