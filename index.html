@@ -26,9 +26,10 @@
 
         header h1 {
             margin: 0;
-            font-size: 3rem;
-            font-family: 'Courier New', Courier, monospace;
-            letter-spacing: 1.5px;
+            font-size: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         header::after {
@@ -157,19 +158,6 @@
             color: white;
         }
 
-        /* أيقونات جديدة عند النقر */
-        .icon {
-            display: none;
-            font-size: 20px;
-            margin-left: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .liked .icon-liked,
-        .copied .icon-copied {
-            display: inline-block;
-        }
-
         /* تصميم زر النسخ */
         .copy-btn {
             background-color: #00e676;
@@ -190,10 +178,6 @@
             cursor: pointer;
         }
 
-        .share-btn:focus {
-            background-color: #0d47a1;
-        }
-
         footer {
             text-align: center;
             padding: 20px;
@@ -205,32 +189,88 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* تصميم نافذة اختيار التطبيق للمشاركة */
-        .share-options {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
+        /* صفحة النصائح المفضلة */
+        #liked-tips-section {
+            background-color: #fff4e6;
+            margin: 20px;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .share-options button {
-            background-color: #4caf50;
+        #liked-tips-section h2 {
+            color: #ff5722;
+            display: flex;
+            align-items: center;
+        }
+
+        #liked-tips-section h2::before {
+            content: "⭐";
+            margin-right: 10px;
+        }
+
+        /* تصميم الإشعار */
+        .notification {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background-color: #ff9800;
             color: white;
-            padding: 10px;
-            border: none;
+            padding: 15px;
             border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
         }
 
-        .share-options button:hover {
-            background-color: #388e3c;
+        .notification .timer-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: white;
+            width: 100%;
+            animation: countdown 3s linear forwards;
         }
+
+        @keyframes countdown {
+            0% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        .notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* التنسيق الجديد للتفاعلات */
+        .like-icon, .copy-icon, .share-icon {
+            display: none;
+            color: green;
+            font-size: 1.5rem;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .tip.liked .like-icon {
+            display: block;
+        }
+
+        .tip.copied .copy-icon {
+            display: block;
+        }
+
+        .tip.shared .share-icon {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -247,6 +287,12 @@
         </nav>
     </header>
 
+    <!-- النصيحة الأكثر تفضيلاً -->
+    <section id="most-liked-tip">
+        <h2>أكثر النصائح تفضيلاً من الزوار:</h2>
+        <p id="most-liked-text">هذه النصيحة الأكثر تفضيلاً حالياً...</p>
+    </section>
+
     <!-- شريط البحث -->
     <section id="search-bar">
         <input type="text" placeholder="ابحث عن نصيحة..." id="search-input">
@@ -258,6 +304,15 @@
         <h2>نصائح اليوم</h2>
         <div id="tips-container">
             <!-- سيتم إضافة النصائح هنا بواسطة JavaScript -->
+        </div>
+        <button id="load-more" onclick="loadMoreTips()">عرض المزيد</button>
+    </section>
+
+    <!-- قائمة النصائح التي نالت إعجاب المستخدم -->
+    <section id="liked-tips-section">
+        <h2>نصائحي المفضلة</h2>
+        <div id="liked-tips-container">
+            <!-- سيتم إضافة النصائح التي نالت إعجاب المستخدم هنا -->
         </div>
     </section>
 
@@ -273,67 +328,106 @@
         <p>جميع الحقوق محفوظة © 2025 نصائح يومية لتحسين حياتك</p>
     </footer>
 
-    <!-- نافذة المشاركة -->
-    <div id="share-options" class="share-options">
-        <button onclick="shareViaApp('WhatsApp')">مشاركة عبر WhatsApp</button>
-        <button onclick="shareViaApp('Facebook')">مشاركة عبر Facebook</button>
-        <button onclick="shareViaApp('Twitter')">مشاركة عبر Twitter</button>
-        <button onclick="closeShareOptions()">إغلاق</button>
-    </div>
-
     <script>
-        let likedTips = [];
+        const tips = [
+            "لا تؤجل عمل اليوم إلى الغد.",
+            "الابتسامة مفتاح النجاح.",
+            "الاستثمار في النفس هو أفضل استثمار.",
+            "استمتع بالأشياء الصغيرة في الحياة.",
+            "كلما تعلمت أكثر، زادت فرص النجاح.",
+            "كن صبوراً وابدأ بخطوات صغيرة.",
+            "ابتعد عن الأشخاص السامين.",
+            "تحكم في أفكارك لتتحكم في حياتك.",
+            "الأمل هو سر النجاح.",
+            "كل يوم هو فرصة جديدة للتعلم والنمو."
+        ];
 
-        function likeTip(tip) {
-            likedTips.push(tip);
-            alert("تم إضافة النصيحة إلى المفضلة!");
-            document.querySelector(`#tip-${tip}`).classList.add('liked');
-            updateMostLikedTip(tip);
+        const wisdoms = [
+            "الحكمة هي الجسر بين المعرفة والعمل.",
+            "الشجاعة ليست غياب الخوف، بل القدرة على مواجهته.",
+            "السعادة لا تأتي من المال، بل من العطاء.",
+            "من لا يتعلم من أخطائه لن ينجح.",
+            "الحكمة تبدأ بتوجيه أسئلة صحيحة.",
+            "التفكير هو أساس الإبداع.",
+            "الوقت هو أكثر ما نهدره دون أن نشعر.",
+            "العقل مثل العضلة، كلما تمرن، أصبح أقوى.",
+            "النجاح ليس مصادفة، بل نتيجة للاستمرار.",
+            "من يريد النجاح يجب أن يتعلم الصبر."
+        ];
+
+        let likedTips = []; // حفظ النصائح التي نالت إعجاب المستخدم
+        let likedWisdoms = []; // حفظ الحكم التي نالت إعجاب المستخدم
+        let mostLikedTip = tips[0]; // النصيحة الأكثر تفضيلاً حالياً
+
+        function displayNotification() {
+            const notification = document.createElement("div");
+            notification.className = "notification";
+            notification.innerHTML = `
+                <p>${tips[Math.floor(Math.random() * tips.length)]}</p>
+                <button onclick="this.parentElement.style.display='none'">&times;</button>
+                <div class="timer-bar"></div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.opacity = "0";
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
-        function copyText(tip) {
-            navigator.clipboard.writeText(tip);
-            alert("تم نسخ النص!");
-            document.querySelector(`#tip-${tip}`).classList.add('copied');
-        }
-
-        function shareText(tip) {
-            document.getElementById("share-options").style.display = "block";
-        }
-
-        function shareViaApp(app) {
-            alert(`تمت المشاركة عبر ${app}`);
-            closeShareOptions();
-        }
-
-        function closeShareOptions() {
-            document.getElementById("share-options").style.display = "none";
-        }
-
-        function searchTips() {
-            const query = document.getElementById("search-input").value;
-            const filteredTips = tips.filter(tip => tip.includes(query));
+        function loadMoreTips() {
             const tipsContainer = document.getElementById("tips-container");
-            tipsContainer.innerHTML = "";
-            filteredTips.forEach(tip => {
+            tips.forEach(tip => {
                 const tipElement = document.createElement("div");
-                tipElement.id = `tip-${tip}`;
                 tipElement.className = "tip";
                 tipElement.innerHTML = `
                     <p>${tip}</p>
                     <button onclick="likeTip('${tip}')">👍 أعجبني</button>
                     <button class="copy-btn" onclick="copyText('${tip}')">📋 نسخ</button>
-                    <button class="share-btn" onclick="shareText('${tip}')">🔗 مشاركة</button>
-                    <span class="icon icon-liked">✔️</span>
-                    <span class="icon icon-copied">📋</span>
+                    <button class="share-btn" onclick="shareTip('${tip}')">🔗 مشاركة</button>
+                    <span class="like-icon">👍</span>
+                    <span class="copy-icon">📋 تم النسخ!</span>
+                    <span class="share-icon">🔗 تم المشاركة!</span>
                 `;
                 tipsContainer.appendChild(tipElement);
             });
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            loadTips();
-        });
+        function likeTip(tip) {
+            if (!likedTips.includes(tip)) {
+                likedTips.push(tip);
+                alert("تم إضافة النصيحة إلى المفضلة!");
+                document.querySelectorAll('.tip').forEach(element => {
+                    if (element.innerText.includes(tip)) {
+                        element.classList.add("liked");
+                    }
+                });
+            }
+        }
+
+        function copyText(tip) {
+            navigator.clipboard.writeText(tip);
+            document.querySelectorAll('.tip').forEach(element => {
+                if (element.innerText.includes(tip)) {
+                    element.classList.add("copied");
+                }
+            });
+        }
+
+        function shareTip(tip) {
+            const url = `https://www.example.com/share?text=${encodeURIComponent(tip)}`;
+            document.querySelectorAll('.tip').forEach(element => {
+                if (element.innerText.includes(tip)) {
+                    element.classList.add("shared");
+                }
+            });
+            window.open(url, "_blank");
+        }
+
+        // عرض النصائح عند تحميل الصفحة
+        window.onload = function() {
+            loadMoreTips();
+            displayNotification();
+        };
     </script>
 </body>
 </html>
