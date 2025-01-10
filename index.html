@@ -1,100 +1,56 @@
+<!-- HTML (Frontend) -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>توقع الاسم والعمر</title>
-    <!-- Embedded CSS for styling -->
+    <title>مولد الصور</title>
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(to right, #141E30, #243B55);
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            direction: rtl;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            background: #1e3c72;
-            color: #fff;
-        }
-
-        h1 {
-            color: #FFD700;
-            font-size: 2.5rem;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: #FFD700;
-            color: #000;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-            margin-top: 20px;
-        }
-
-        button:hover {
-            background-color: #ffcc00;
-        }
-
-        .result {
-            margin-top: 30px;
-            font-size: 1.5rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .hidden {
-            display: none;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; }
+        input, button { margin: 10px; padding: 10px; font-size: 16px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>توقع الاسم والعمر</h1>
-        <p>اضغط على الزر للتنبؤ باسمك وعمرك</p>
-        <button id="predictBtn">توقع الآن</button>
-        <div id="result" class="result hidden">
-            <p id="predictedName">الاسم: </p>
-            <p id="predictedAge">العمر المتوقع: </p>
-        </div>
-    </div>
+    <h1>مولد الصور بالوصف</h1>
+    <input type="text" id="description" placeholder="أدخل وصف الصورة" />
+    <button onclick="generateImage()">توليد الصورة</button>
+    <div id="result"></div>
 
-    <!-- Embedded JavaScript for prediction logic -->
     <script>
-        document.getElementById('predictBtn').addEventListener('click', function () {
-            // هنا يمكنك إضافة منطق معقد للتنبؤ بناءً على بيانات، لكن سنقوم بعمل توقع بسيط الآن.
-            const randomNames = ["فارس", "محمد", "عبدالله", "نايف", "يوسف"];
-            const randomAges = [25, 30, 35, 40, 45, 50];
-
-            // اختيار اسم عشوائي من القائمة
-            const predictedName = randomNames[Math.floor(Math.random() * randomNames.length)];
-            // اختيار عمر عشوائي من القائمة
-            const predictedAge = randomAges[Math.floor(Math.random() * randomAges.length)];
-
-            // عرض النتيجة
-            document.getElementById('predictedName').textContent = `الاسم: ${predictedName}`;
-            document.getElementById('predictedAge').textContent = `العمر المتوقع: ${predictedAge}`;
-            document.getElementById('result').classList.remove('hidden');
-        });
+        function generateImage() {
+            const description = document.getElementById('description').value;
+            fetch('/generate-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: description })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = '<img src="' + data.image_url + '" alt="Generated Image" />';
+            });
+        }
     </script>
 </body>
 </html>
+
+<!-- Python (Backend using Flask) -->
+from flask import Flask, request, jsonify
+import requests
+
+app = Flask(__name__)
+
+# مثال على واجهة توليد الصور باستخدام API مثل DALL·E
+@app.route('/generate-image', methods=['POST'])
+def generate_image():
+    data = request.get_json()
+    description = data['description']
+    
+    # إرسال الطلب إلى خدمة توليد الصور (استبدال هذا الجزء بال API الخاصة بك)
+    image_url = "https://api.openai.com/v1/dalle"  # رابط API لتوليد الصور
+    # هنا تقوم بطلب الصورة باستخدام API وتعيد الرابط أو الصورة.
+
+    # مثال لإرجاع الصورة (الربط بالمثال الوهمي)
+    return jsonify({'image_url': 'https://example.com/generated-image.jpg'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
