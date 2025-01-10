@@ -203,6 +203,47 @@
             content: "⭐";
             margin-right: 10px;
         }
+
+        /* تصميم الإشعار */
+        .notification {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background-color: #ff9800;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification .timer-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: white;
+            width: 100%;
+            animation: countdown 3s linear forwards;
+        }
+
+        @keyframes countdown {
+            0% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        .notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -214,6 +255,7 @@
                 <li><a href="#today-tips">📅 نصائح اليوم</a></li>
                 <li><a href="#liked-tips-section">💖 نصائحي المفضلة</a></li>
                 <li><a href="#contact">📞 تواصل معنا</a></li>
+                <li><a href="#wisdom">💡 الحكم</a></li>
             </ul>
         </nav>
     </header>
@@ -247,6 +289,14 @@
         </div>
     </section>
 
+    <!-- صفحة الحكم -->
+    <section id="wisdom">
+        <h2>أقوال وحكم</h2>
+        <div id="wisdom-container">
+            <!-- سيتم إضافة الحكم هنا بواسطة JavaScript -->
+        </div>
+    </section>
+
     <footer>
         <p>جميع الحقوق محفوظة © 2025 نصائح يومية لتحسين حياتك</p>
     </footer>
@@ -265,82 +315,94 @@
             "كل يوم هو فرصة جديدة للتعلم والنمو."
         ];
 
-        let currentPage = 1;
-        const tipsPerPage = 5;
-        let likedTips = [];
+        const wisdoms = [
+            "الحكمة هي الجسر بين المعرفة والعمل.",
+            "الشجاعة ليست غياب الخوف، بل القدرة على مواجهته.",
+            "السعادة لا تأتي من المال، بل من العطاء.",
+            "من لا يتعلم من أخطائه لن ينجح.",
+            "الحكمة تبدأ بتوجيه أسئلة صحيحة.",
+            "التفكير هو أساس الإبداع.",
+            "الوقت هو أكثر ما نهدره دون أن نشعر.",
+            "العقل مثل العضلة، كلما تمرن، أصبح أقوى.",
+            "النجاح ليس مصادفة، بل نتيجة للاستمرار.",
+            "من يريد النجاح يجب أن يتعلم الصبر."
+        ];
 
-        // دالة لعرض النصائح
-        function displayTips() {
-            const tipsContainer = document.getElementById('tips-container');
-            const start = (currentPage - 1) * tipsPerPage;
-            const end = start + tipsPerPage;
-            const slicedTips = tips.slice(start, end);
-
-            slicedTips.forEach((tip, index) => {
-                const tipDiv = document.createElement('div');
-                tipDiv.classList.add('tip');
-                tipDiv.innerHTML = `
-                    <p>${tip}</p>
-                    <button onclick="likeTip(${start + index})">👍</button>
-                    <button onclick="shareTip(${start + index})">📤</button>
-                    <button onclick="copyTip(${start + index})">📋</button>
-                `;
-                tipsContainer.appendChild(tipDiv);
-            });
+        function displayNotification() {
+            const notification = document.createElement("div");
+            notification.className = "notification";
+            notification.innerHTML = `
+                <p>${tips[Math.floor(Math.random() * tips.length)]}</p>
+                <button onclick="this.parentElement.style.display='none'">&times;</button>
+                <div class="timer-bar"></div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.opacity = "0";
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
-        // دالة لتحميل المزيد من النصائح
         function loadMoreTips() {
-            currentPage++;
-            displayTips();
-        }
-
-        // دالة لإعجاب النصيحة
-        function likeTip(index) {
-            likedTips.push(tips[index]);
-            updateLikedTips();
-            alert(`تم إضافة النصيحة إلى المفضلة: "${tips[index]}"`);
-        }
-
-        // دالة لمشاركة النصيحة
-        function shareTip(index) {
-            alert(`مشاركة النصيحة: "${tips[index]}"`);
-        }
-
-        // دالة لنسخ النصيحة
-        function copyTip(index) {
-            navigator.clipboard.writeText(tips[index])
-                .then(() => alert("تم نسخ النصيحة!"))
-                .catch(() => alert("فشل في نسخ النصيحة."));
-        }
-
-        // دالة لعرض النصائح المفضلة
-        function updateLikedTips() {
-            const likedTipsContainer = document.getElementById('liked-tips-container');
-            likedTipsContainer.innerHTML = '';
-            likedTips.forEach((tip, index) => {
-                const tipDiv = document.createElement('div');
-                tipDiv.classList.add('tip');
-                tipDiv.innerHTML = `<p>${tip}</p>`;
-                likedTipsContainer.appendChild(tipDiv);
+            const tipsContainer = document.getElementById("tips-container");
+            tips.forEach(tip => {
+                const tipElement = document.createElement("div");
+                tipElement.className = "tip";
+                tipElement.innerHTML = `
+                    <p>${tip}</p>
+                    <button>👍 أعجبني</button>
+                    <button>💬 تعليق</button>
+                    <button>🔗 مشاركة</button>
+                `;
+                tipsContainer.appendChild(tipElement);
             });
         }
 
-        // دالة للبحث عن النصيحة
         function searchTips() {
-            const searchInput = document.getElementById('search-input').value.toLowerCase();
-            const results = tips.filter(tip => tip.toLowerCase().includes(searchInput));
-            alert(`نتائج البحث: ${results.join(', ')}`);
+            const query = document.getElementById("search-input").value;
+            if (query) {
+                const filteredTips = tips.filter(tip => tip.includes(query));
+                const tipsContainer = document.getElementById("tips-container");
+                tipsContainer.innerHTML = "";
+                filteredTips.forEach(tip => {
+                    const tipElement = document.createElement("div");
+                    tipElement.className = "tip";
+                    tipElement.innerHTML = `
+                        <p>${tip}</p>
+                        <button>👍 أعجبني</button>
+                        <button>💬 تعليق</button>
+                        <button>🔗 مشاركة</button>
+                    `;
+                    tipsContainer.appendChild(tipElement);
+                });
+            }
         }
 
-        // إشعارات كل 10 ثواني
-        setInterval(() => {
-            const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            alert(`نصيحة تطوير الذات: ${randomTip}`);
-        }, 10000);
+        function displayWisdoms() {
+            const wisdomContainer = document.getElementById("wisdom-container");
+            wisdoms.forEach(wisdom => {
+                const wisdomElement = document.createElement("div");
+                wisdomElement.className = "tip";
+                wisdomElement.innerHTML = `<p>${wisdom}</p>`;
+                wisdomContainer.appendChild(wisdomElement);
+            });
+        }
 
-        // عرض النصائح عند تحميل الصفحة
-        window.onload = displayTips;
+        // عرض النصائح المفضلة
+        const likedTips = [];
+        document.getElementById("liked-tips-section").addEventListener("click", (event) => {
+            if (event.target.innerText === "👍 أعجبني") {
+                likedTips.push(event.target.closest(".tip").innerText);
+                alert("تم إضافة النصيحة إلى المفضلة!");
+            }
+        });
+
+        // عرض النصائح بعد تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", () => {
+            loadMoreTips();
+            displayWisdoms();
+            setInterval(displayNotification, 10000); // عرض إشعار كل 10 ثواني
+        });
     </script>
 </body>
 </html>
