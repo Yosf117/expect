@@ -6,21 +6,22 @@
     <title>نصائح يومية لتحسين حياتك</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* تحسين التصميم باستخدام ألوان أكثر وجاذبية */
+        /* تحسين التصميم */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #fff9f0; /* خلفية ملونة */
             color: #333;
             margin: 0;
             padding: 0;
         }
 
         header {
-            background-color: #4a90e2;
+            background-color: #ffcc80; /* لون جذاب */
             color: white;
             padding: 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         header h1 {
@@ -31,9 +32,15 @@
             align-items: center;
         }
 
-        header h1::before {
-            content: "💡";
-            margin-right: 10px;
+        /* زخرفة على الهيدر */
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: url('https://www.transparenttextures.com/patterns/arches.png');
         }
 
         nav ul {
@@ -67,7 +74,7 @@
 
         #search-bar button {
             padding: 10px 20px;
-            background-color: #4a90e2;
+            background-color: #ffb74d;
             color: white;
             border: none;
             border-radius: 5px;
@@ -76,13 +83,8 @@
             font-size: 1.2rem;
         }
 
-        #search-bar button::before {
-            content: "🔍";
-            margin-right: 5px;
-        }
-
         #search-bar button:hover {
-            background-color: #357abd;
+            background-color: #ffa726;
         }
 
         #featured-tip, #today-tips, #archive, #contact {
@@ -93,19 +95,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #featured-tip h2, #today-tips h2, #archive h2, #contact h2 {
-            color: #4a90e2;
-            display: flex;
-            align-items: center;
-        }
-
-        #featured-tip h2::before {
-            content: "✨";
-            margin-right: 10px;
-        }
-
         .tip {
-            background-color: #f9f9f9;
+            background-color: #fff7e0;
             margin-bottom: 15px;
             padding: 10px;
             border-radius: 8px;
@@ -121,16 +112,31 @@
         .tip button {
             padding: 5px 10px;
             margin-right: 10px;
-            background-color: #4a90e2;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .tip button:nth-child(1) {
+            background-color: #ffeb3b; /* لون الإعجاب أصفر */
+            color: #333;
+        }
+
+        .tip button:nth-child(2) {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .tip button:nth-child(3) {
+            background-color: #ff9800;
+            color: white;
         }
 
         .tip button:hover {
-            background-color: #357abd;
+            opacity: 0.8;
         }
 
         .tip button::before {
@@ -146,13 +152,33 @@
         }
 
         .tip button:nth-child(3)::before {
+            content: "📋"; /* إيموجي نسخ */
+        }
+
+        #liked-tips-section {
+            display: none;
+            background-color: #fff4e6;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #liked-tips-section h2 {
+            color: #ff5722;
+            display: flex;
+            align-items: center;
+        }
+
+        #liked-tips-section h2::before {
             content: "⭐";
+            margin-right: 10px;
         }
 
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #4a90e2;
+            background-color: #ffcc80;
             color: white;
             position: relative;
             bottom: 0;
@@ -211,22 +237,12 @@
         <button id="load-more">عرض المزيد</button>
     </section>
 
-    <!-- أرشيف النصائح -->
-    <section id="archive">
-        <h2>أرشيف النصائح</h2>
-        <p>تصفح نصائح الأيام السابقة حسب الفئات.</p>
-    </section>
-
-    <!-- تواصل معنا -->
-    <section id="contact">
-        <h2>تواصل معنا</h2>
-        <form>
-            <label for="name">الاسم:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="message">الرسالة:</label>
-            <textarea id="message" name="message" required></textarea>
-            <button type="submit">إرسال</button>
-        </form>
+    <!-- قائمة النصائح التي نالت إعجاب المستخدم -->
+    <section id="liked-tips-section">
+        <h2>نصائحي المفضلة</h2>
+        <div id="liked-tips-container">
+            <!-- سيتم إضافة النصائح التي نالت إعجاب المستخدم هنا -->
+        </div>
     </section>
 
     <!-- Footer -->
@@ -246,6 +262,9 @@
             // أضف حتى 150 نصيحة هنا...
         ];
 
+        // قائمة النصائح المفضلة
+        let likedTips = [];
+
         // عدد النصائح الذي سيتم عرضه في كل مرة
         let tipsPerPage = 10;
         let currentPage = 1;
@@ -262,29 +281,4 @@
                 tipDiv.classList.add('tip');
                 tipDiv.innerHTML = `
                     <p>${tip}</p>
-                    <button>أعجبني</button>
-                    <button>شارك</button>
-                    <button>إضافة إلى المفضلة</button>
-                `;
-                tipsContainer.appendChild(tipDiv);
-            });
-        }
-
-        // تحميل المزيد من النصائح عند الضغط على زر "عرض المزيد"
-        document.getElementById('load-more').addEventListener('click', function() {
-            currentPage++;
-            displayTips();
-
-            // إخفاء الزر إذا تم عرض جميع النصائح
-            if (currentPage * tipsPerPage >= tips.length) {
-                this.style.display = 'none';
-            }
-        });
-
-        // عرض النصائح عند تحميل الصفحة
-        window.onload = function() {
-            displayTips();
-        };
-    </script>
-</body>
-</html>
+                   
