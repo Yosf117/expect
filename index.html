@@ -359,11 +359,11 @@
         let likedWisdoms = []; // حفظ الحكم التي نالت إعجاب المستخدم
         let mostLikedTip = tips[0]; // النصيحة الأكثر تفضيلاً حالياً
 
-        function displayNotification() {
+        function displayNotification(message) {
             const notification = document.createElement("div");
             notification.className = "notification";
             notification.innerHTML = `
-                <p>${tips[Math.floor(Math.random() * tips.length)]}</p>
+                <p>${message}</p>
                 <button onclick="this.parentElement.style.display='none'">&times;</button>
                 <div class="timer-bar"></div>
             `;
@@ -395,12 +395,12 @@
         function likeTip(tip) {
             if (!likedTips.includes(tip)) {
                 likedTips.push(tip);
-                alert("تم إضافة النصيحة إلى المفضلة!");
                 document.querySelectorAll('.tip').forEach(element => {
                     if (element.innerText.includes(tip)) {
                         element.classList.add("liked");
                     }
                 });
+                displayNotification("تم إضافة النصيحة إلى المفضلة!");
             }
         }
 
@@ -411,6 +411,7 @@
                     element.classList.add("copied");
                 }
             });
+            displayNotification("تم نسخ النصيحة!");
         }
 
         function shareTip(tip) {
@@ -426,7 +427,6 @@
         // عرض النصائح عند تحميل الصفحة
         window.onload = function() {
             loadMoreTips();
-            displayNotification();
         };
     </script>
 </body>
