@@ -249,6 +249,34 @@
             cursor: pointer;
         }
 
+        /* تصميم صفحة الحكم */
+        #wisdom-container {
+            background-color: #fff8e1;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .wisdom {
+            background-color: #fff3cd;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .wisdom:hover {
+            background-color: #fff9e0;
+        }
+
+        .wisdom p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
     </style>
 </head>
 <body>
@@ -259,8 +287,8 @@
                 <li><a href="#">🏠 الرئيسية</a></li>
                 <li><a href="#today-tips">📅 نصائح اليوم</a></li>
                 <li><a href="#liked-tips-section">💖 نصائحي المفضلة</a></li>
+                <li><a href="wisdom.html">💡 الحكم</a></li> <!-- رابط صفحة الحكم الجديدة -->
                 <li><a href="#contact">📞 تواصل معنا</a></li>
-                <li><a href="#wisdom">💡 الحكم</a></li>
             </ul>
         </nav>
     </header>
@@ -294,14 +322,6 @@
         </div>
     </section>
 
-    <!-- صفحة الحكم -->
-    <section id="wisdom">
-        <h2>أقوال وحكم</h2>
-        <div id="wisdom-container">
-            <!-- سيتم إضافة الحكم هنا بواسطة JavaScript -->
-        </div>
-    </section>
-
     <footer>
         <p>جميع الحقوق محفوظة © 2025 نصائح يومية لتحسين حياتك</p>
     </footer>
@@ -317,7 +337,10 @@
             "ابتعد عن الأشخاص السامين.",
             "تحكم في أفكارك لتتحكم في حياتك.",
             "الأمل هو سر النجاح.",
-            "كل يوم هو فرصة جديدة للتعلم والنمو."
+            "كل يوم هو فرصة جديدة للتعلم والنمو.",
+            "اعمل بحب، فالحب هو الوقود الحقيقي للنجاح.",
+            "ثق بقدراتك، فالتحديات يمكن تجاوزها.",
+            "التعاون هو الطريق الأمثل لتحقيق الأهداف."
         ];
 
         const wisdoms = [
@@ -333,25 +356,6 @@
             "من يريد النجاح يجب أن يتعلم الصبر."
         ];
 
-        let likedTips = []; // حفظ النصائح التي نالت إعجاب المستخدم
-        let likedWisdoms = []; // حفظ الحكم التي نالت إعجاب المستخدم
-        let mostLikedTip = tips[0]; // النصيحة الأكثر تفضيلاً حالياً
-
-        function displayNotification() {
-            const notification = document.createElement("div");
-            notification.className = "notification";
-            notification.innerHTML = `
-                <p>${tips[Math.floor(Math.random() * tips.length)]}</p>
-                <button onclick="this.parentElement.style.display='none'">&times;</button>
-                <div class="timer-bar"></div>
-            `;
-            document.body.appendChild(notification);
-            setTimeout(() => {
-                notification.style.opacity = "0";
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
         function loadMoreTips() {
             const tipsContainer = document.getElementById("tips-container");
             tips.forEach(tip => {
@@ -364,38 +368,6 @@
                     <button class="share-btn" onclick="shareText('${tip}')">🔗 مشاركة</button>
                 `;
                 tipsContainer.appendChild(tipElement);
-            });
-        }
-
-        function likeTip(tip) {
-            likedTips.push(tip);
-            alert("تم إضافة النصيحة إلى المفضلة!");
-            updateLikedTips();
-            updateMostLikedTip(tip);
-        }
-
-        function updateMostLikedTip(tip) {
-            if (!mostLikedTip) {
-                mostLikedTip = tip;
-            } else {
-                const tipCount = likedTips.filter(t => t === tip).length;
-                if (tipCount > likedTips.filter(t => t === mostLikedTip).length) {
-                    mostLikedTip = tip;
-                }
-            }
-            document.getElementById("most-liked-text").textContent = mostLikedTip;
-        }
-
-        function updateLikedTips() {
-            const likedContainer = document.getElementById("liked-tips-container");
-            likedContainer.innerHTML = "";
-            likedTips.forEach(tip => {
-                const likedElement = document.createElement("div");
-                likedElement.className = "tip";
-                likedElement.innerHTML = `
-                    <p>${tip}</p>
-                `;
-                likedContainer.appendChild(likedElement);
             });
         }
 
@@ -438,8 +410,8 @@
 
         window.onload = function() {
             loadMoreTips();
-            setInterval(displayNotification, 10000);
         };
     </script>
 </body>
 </html>
+
