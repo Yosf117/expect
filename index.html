@@ -421,16 +421,25 @@
 
         function copyText(text) {
             navigator.clipboard.writeText(text);
-            alert("تم نسخ النصيحة إلى الحافظة!");
+            alert("تم نسخ النص!");
         }
 
         function shareText(text) {
             if (navigator.share) {
                 navigator.share({
-                    title: 'نصيحة اليوم',
+                    title: 'نصيحة تطوير الذات',
                     text: text,
-                }).then(() => console.log("تم المشاركة بنجاح!"))
-                  .catch((error) => console.log("فشل في المشاركة:", error));
+                    url: window.location.href
+                }).then(() => alert('تم المشاركة!')).catch(console.error);
             } else {
-                alert("خاصية المشاركة غير مدعومة في متصفحك.");
+                alert("مشاركة غير مدعومة في هذا المتصفح.");
             }
+        }
+
+        window.onload = function() {
+            loadMoreTips();
+            setInterval(displayNotification, 10000);
+        };
+    </script>
+</body>
+</html>
