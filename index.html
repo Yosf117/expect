@@ -35,23 +35,10 @@
     <!-- نصائح اليوم -->
     <section id="today-tips">
         <h2>نصائح اليوم</h2>
-        <div class="tips">
-            <!-- مثال لنصيحة -->
-            <div class="tip">
-                <p>هذه نصيحة 1.</p>
-                <button>أعجبني</button>
-                <button>شارك</button>
-                <button>إضافة إلى المفضلة</button>
-            </div>
-            <div class="tip">
-                <p>هذه نصيحة 2.</p>
-                <button>أعجبني</button>
-                <button>شارك</button>
-                <button>إضافة إلى المفضلة</button>
-            </div>
-            <!-- كرر النصائح حتى تصل إلى 150 نصيحة -->
+        <div id="tips-container">
+            <!-- سيتم إضافة النصائح هنا بواسطة JavaScript -->
         </div>
-        <button>عرض المزيد</button>
+        <button id="load-more">عرض المزيد</button>
     </section>
 
     <!-- أرشيف النصائح -->
@@ -76,5 +63,58 @@
     <footer>
         <p>جميع الحقوق محفوظة © 2025 نصائح يومية لتحسين حياتك</p>
     </footer>
+
+    <!-- JavaScript لتحميل 150 نصيحة -->
+    <script>
+        // مصفوفة النصائح
+        const tips = [
+            "لا تؤجل عمل اليوم إلى الغد.",
+            "الابتسامة مفتاح النجاح.",
+            "الاستثمار في النفس هو أفضل استثمار.",
+            "استمتع بالأشياء الصغيرة في الحياة.",
+            "كلما تعلمت أكثر، زادت فرص النجاح.",
+            // أضف حتى 150 نصيحة هنا...
+        ];
+
+        // عدد النصائح الذي سيتم عرضه في كل مرة
+        let tipsPerPage = 10;
+        let currentPage = 1;
+
+        // دالة لعرض النصائح
+        function displayTips() {
+            const tipsContainer = document.getElementById('tips-container');
+            const start = (currentPage - 1) * tipsPerPage;
+            const end = start + tipsPerPage;
+            const slicedTips = tips.slice(start, end);
+
+            slicedTips.forEach((tip, index) => {
+                const tipDiv = document.createElement('div');
+                tipDiv.classList.add('tip');
+                tipDiv.innerHTML = `
+                    <p>${tip}</p>
+                    <button>أعجبني</button>
+                    <button>شارك</button>
+                    <button>إضافة إلى المفضلة</button>
+                `;
+                tipsContainer.appendChild(tipDiv);
+            });
+        }
+
+        // تحميل المزيد من النصائح عند الضغط على زر "عرض المزيد"
+        document.getElementById('load-more').addEventListener('click', function() {
+            currentPage++;
+            displayTips();
+
+            // إخفاء الزر إذا تم عرض جميع النصائح
+            if (currentPage * tipsPerPage >= tips.length) {
+                this.style.display = 'none';
+            }
+        });
+
+        // عرض النصائح عند تحميل الصفحة
+        window.onload = function() {
+            displayTips();
+        };
+    </script>
 </body>
 </html>
