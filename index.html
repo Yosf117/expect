@@ -6,7 +6,7 @@
     <title>نصائح يومية لتحسين حياتك</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* تصميم جذاب */
+        /* تحسين التصميم باستخدام ألوان أكثر وجاذبية */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f0f2f5;
@@ -26,6 +26,14 @@
         header h1 {
             margin: 0;
             font-size: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header h1::before {
+            content: "💡";
+            margin-right: 10px;
         }
 
         nav ul {
@@ -65,6 +73,12 @@
             border-radius: 5px;
             cursor: pointer;
             margin-left: 10px;
+            font-size: 1.2rem;
+        }
+
+        #search-bar button::before {
+            content: "🔍";
+            margin-right: 5px;
         }
 
         #search-bar button:hover {
@@ -81,6 +95,13 @@
 
         #featured-tip h2, #today-tips h2, #archive h2, #contact h2 {
             color: #4a90e2;
+            display: flex;
+            align-items: center;
+        }
+
+        #featured-tip h2::before {
+            content: "✨";
+            margin-right: 10px;
         }
 
         .tip {
@@ -89,6 +110,7 @@
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .tip p {
@@ -104,10 +126,27 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 1rem;
         }
 
         .tip button:hover {
             background-color: #357abd;
+        }
+
+        .tip button::before {
+            margin-right: 5px;
+        }
+
+        .tip button:nth-child(1)::before {
+            content: "👍";
+        }
+
+        .tip button:nth-child(2)::before {
+            content: "📤";
+        }
+
+        .tip button:nth-child(3)::before {
+            content: "⭐";
         }
 
         footer {
@@ -143,10 +182,10 @@
         <h1>نصائح يومية لتحسين حياتك</h1>
         <nav>
             <ul>
-                <li><a href="#">الرئيسية</a></li>
-                <li><a href="#today-tips">نصائح اليوم</a></li>
-                <li><a href="#archive">أرشيف النصائح</a></li>
-                <li><a href="#contact">تواصل معنا</a></li>
+                <li><a href="#">🏠 الرئيسية</a></li>
+                <li><a href="#today-tips">📅 نصائح اليوم</a></li>
+                <li><a href="#archive">📚 أرشيف النصائح</a></li>
+                <li><a href="#contact">📞 تواصل معنا</a></li>
             </ul>
         </nav>
     </header>
